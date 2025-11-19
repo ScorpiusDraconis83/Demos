@@ -1,7 +1,8 @@
 // The various error messages.
 const PROMPT_DOCS_INSTRUCTIONS = "Please check the <a href='https://learn.microsoft.com/microsoft-edge/web-platform/prompt-api'>documentation</a> and try again.";
 const WA_DOCS_INSTRUCTIONS = "Please check the <a href='https://learn.microsoft.com/microsoft-edge/web-platform/writing-assistance-apis'>documentation</a> and try again.";
-const TRANSLATOR_DOCS_INSTRUCTIONS = "Please check the <a href='https://learn.microsoft.com/microsoft-edge/web-platform/writing-assistance-apis'>documentation</a> and try again.";
+const TRANSLATOR_DOCS_INSTRUCTIONS = "Please check the <a href='https://learn.microsoft.com/microsoft-edge/web-platform/translator-apis'>documentation</a> and try again.";
+const PROOFREADER_DOCS_INSTRUCTIONS = "Please check the <a href='https://learn.microsoft.com/microsoft-edge/web-platform/proofreader-api'>documentation</a> and try again.";
 
 const ERR_LANGUAGEMODEL_API_NOT_DETECTED = `The LanguageModel API is not available. ${PROMPT_DOCS_INSTRUCTIONS}`;
 const ERR_LANGUAGEMODEL_MODEL_NOT_AVAILABLE = `The LanguageModel API is enabled, but the model download hasn't started yet, maybe awaiting device capability check. ${PROMPT_DOCS_INSTRUCTIONS}`;
@@ -18,6 +19,10 @@ const INFO_WRITER_MODEL_DOWNLOADABLE =  "The model will be downloaded the first 
 const ERR_REWRITER_API_NOT_DETECTED = `The Rewriter API is not available. ${WA_DOCS_INSTRUCTIONS}`;
 const ERR_REWRITER_MODEL_NOT_AVAILABLE = `The Rewriter API is enabled, but the model download hasn't started yet, maybe awaiting device capability check. ${WA_DOCS_INSTRUCTIONS}`;
 const INFO_REWRITER_MODEL_DOWNLOADABLE =  "The model will be downloaded the first time the API is used.";
+
+const ERR_PROOFREADER_API_NOT_DETECTED = `The Proofreader API is not available. ${PROOFREADER_DOCS_INSTRUCTIONS}`;
+const ERR_PROOFREADER_MODEL_NOT_AVAILABLE = `The Proofreader API is enabled, but the model download hasn't started yet, maybe awaiting device capability check. ${PROOFREADER_DOCS_INSTRUCTIONS}`;
+const INFO_PROOFREADER_MODEL_DOWNLOADABLE =  "The model will be downloaded the first time the API is used.";
 
 const ERR_TRANSLATOR_API_NOT_DETECTED = `The Translator API is not available. ${WA_DOCS_INSTRUCTIONS}`;
 const ERR_TRANSLATOR_MODEL_NOT_AVAILABLE = `The Translator API is enabled, but the model download hasn't started yet, maybe awaiting device capability check. ${TRANSLATOR_DOCS_INSTRUCTIONS}`;
@@ -99,6 +104,10 @@ const defaultRewriterSessionOptions = {
   format: "as-is", // as-is, plain-text, markdown.
   monitor: modelDownloadProgressMonitor
 };
+const defaultProofreaderSessionOptions = {
+  expectedInputLanguages: ["en"], // The expected input languages.
+  monitor: modelDownloadProgressMonitor
+};
 const defaultTranslatorSessionOptions = {
   sourceLanguage: "en", // The source language code.
   targetLanguage: "fr", // The target language code.
@@ -133,6 +142,13 @@ function getRewriterAPI() {
   if (window.ai && window.ai.rewriter) return window.ai.rewriter;
   displaySessionMessage(ERR_REWRITER_API_NOT_DETECTED, true);
   throw ERR_REWRITER_API_NOT_DETECTED;
+}
+
+function getProofreaderAPI() {
+  if (window.Proofreader) return window.Proofreader;
+  if (window.ai && window.ai.proofreader) return window.ai.proofreader;
+  displaySessionMessage(ERR_PROOFREADER_API_NOT_DETECTED, true);
+  throw ERR_PROOFREADER_API_NOT_DETECTED;
 }
 
 function getTranslatorAPI() {
@@ -212,6 +228,16 @@ async function checkRewriterAPIAvailability() {
   return availability;
 }
 
+async function checkProofreaderAPIAvailability() {
+  const availability = await checkAPIAvailability(
+    getProofreaderAPI(),
+    ERR_PROOFREADER_MODEL_NOT_AVAILABLE,
+    undefined,
+    INFO_PROOFREADER_MODEL_DOWNLOADABLE
+  );
+  return availability;
+}
+
 async function checkTranslatorAPIAvailability(availabilityOptions) {
   const availability = await checkAPIAvailability(
     getTranslatorAPI(),
@@ -259,6 +285,11 @@ async function getWriterSession(options) {
 async function getRewriterSession(options) {
   await checkRewriterAPIAvailability();
   return await getSession(getRewriterAPI(), defaultRewriterSessionOptions, options);
+}
+
+async function getProofreaderSession(options) {
+  await checkProofreaderAPIAvailability();
+  return await getSession(getProofreaderAPI(), defaultProofreaderSessionOptions, options);
 }
 
 async function getTranslatorSession(options) {
