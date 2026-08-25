@@ -2,22 +2,20 @@ if ('HTMLInstallElement' in window) {
   const installElements = document.querySelectorAll('install');
 
   installElements.forEach((button) => {
-    button.addEventListener('promptaction', (event) => {
-      const label = button.id || button.getAttribute('installurl') || 'same-origin';
-      console.log(`Install succeeded: ${label}`);
-    });
-
-    button.addEventListener('promptdismiss', (event) => {
-      const label = button.id || button.getAttribute('installurl') || 'same-origin';
-      console.log(`Install failed: ${label}`);
-    });
-
-    button.addEventListener('validationstatuschanged', (event) => {
-      if (event.target.invalidReason === 'install_data_invalid') {
-        const label = button.id || button.getAttribute('installurl') || 'same-origin';
-        console.log(`Install data invalid: ${label}`);
-      }
-    });
+        button.addEventListener('installresult', (event) => {
+            const label = button.id || button.getAttribute('manifest') || 'same-origin';
+            switch (event.result) {
+                case 'success':
+                    console.log(`Install succeeded: ${label}`);
+                    break;
+                case 'aborted':
+                    console.log(`Install aborted: ${label}`);
+                    break;
+                case 'invalid_data':
+                    console.log(`Install data invalid: ${label}`);
+                    break;
+            }
+        });
   });
 } else {
   console.error('HTMLInstallElement not supported');
