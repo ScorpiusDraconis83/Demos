@@ -22,6 +22,7 @@
 html {
   background: var(--background);
   height: 100dvh;
+  width: 100dvw;
   font-family: sans-serif;
   color: var(--text);
   box-sizing: border-box;
@@ -32,38 +33,33 @@ html {
 }
 
 body {
-  display: grid;
-  height: 100dvh;
-  grid-template: min-content auto min-content / repeat(4, 1fr);
-  justify-items: stretch;
+  margin: 0;
 }
 
 header {
   padding: var(--content-padding);
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  flex-direction: row;
+
+  grid-row: 1 / 2;
   grid-column: 1 / -1;
+  z-index: 1000;
 }
 
 main {
   padding: var(--content-padding);
+  padding-block-end: 4rem;
 
   grid-row: 2 / 3;
   grid-column: 1 / -1;
 
   display: grid;
+  display: grid-lanes;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 1rem;
-  justify-content: center;
-
-  padding-block-end: 4rem;
-}
-
-@supports (display:grid-lanes) {
-  main {
-    display: grid-lanes;
-  }
+  gap: 1rem;
 }
 
 .instructions {
@@ -103,7 +99,6 @@ code {
   border-radius: 5px;
 }
 
-
 h2 {
   color: var(--subheader2);
   font-size: 1.25rem;
@@ -111,7 +106,7 @@ h2 {
   margin: .2rem 0px;
 }
 
-.app-description {
+.app_descrip {
   line-height: var(--line-height);
   margin-top: .5rem;
 }
@@ -130,15 +125,16 @@ footer {
   justify-content: center;
   align-items: center;
   align-content: center;
+
 }
 
-.store-icon {
+.storeicon {
   margin-left: env(titlebar-area-x, 0);
   margin-top: env(titlebar-area-height, 0);
 
 }
 
-.category-filter {
+.btn_category {
   background: var(--btn-category-bg);
   color: var(--btn-category-fg);
   margin: .3rem;
@@ -149,7 +145,7 @@ footer {
   text-wrap: nowrap;
 }
 
-.install-button {
+.btn_install {
   background: var(--light-green);
   color: var(--green);
   padding: .65rem;
@@ -161,12 +157,12 @@ footer {
   transition: transform ease-in .2s, color ease-in .3s;
 }
 
-.install-button:hover {
+.btn_install:hover {
   color: var(--dark-green);
   transform: scale(1.05);
 }
 
-.install-button-store {
+.btn_install_store {
   background: var(--blue);
   color: var(--off-white);
   padding: .65rem;
@@ -178,24 +174,18 @@ footer {
   transition: transform ease-in .2s, color ease-in .3s;
 }
 
-.install-button-store:hover {
+.btn_install_store:hover {
   color: white;
   transform: scale(1.05);
 }
 
-.filters {
+.category_filter_nav {
   margin: 1rem;
-  ;
   display: flex;
   flex-wrap: wrap;
-  /* backdrop-filter: blur(10px);
-    position: fixed;
-    top:1rem;
-    right: 1rem;
-    border-radius: 15px; */
 }
 
-.app-entry {
+.app_entry {
   background: var(--card-bg);
   border-radius: 1rem;
   padding: 1.2rem;
@@ -207,12 +197,16 @@ footer {
   box-shadow: var(--shadow-color) 0px 0px 0px;
 }
 
-.app-entry:hover {
+.app_entry:hover {
   transform: scale(1.03);
   box-shadow: 10px 10px 20px var(--shadow-color);
 }
 
-.app-icon {
+.app_entry[hidden] {
+  display: none;
+}
+
+.app_icon {
   margin: .5rem;
 }
 
@@ -236,7 +230,7 @@ footer {
     justify-content: space-evenly;
   }
 
-  .filters {
+  .category_filter_nav {
     justify-content: center;
     justify-items: center;
     align-items: center;
@@ -252,13 +246,13 @@ footer {
 
 
 @media (display-mode: 'standalone') {
-  #install-store {
+  #btnInstallStore {
     display: none;
   }
 }
 
 @media (display-mode: 'window-controls-overlay') {
-  #install-store {
+  #btnInstallStore {
     display: none;
   }
 }

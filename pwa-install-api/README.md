@@ -1,10 +1,12 @@
-# Web Install API - `navigator.install()`
+# Install API demo
 
-This directory contains demos that showcase the use of [navigator.install](https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/WebInstall/explainer.md), an API under development to allow web contents to install other web apps.
+This directory contains a demo that showcases the use of [navigator.install](https://github.com/MicrosoftEdge/MSEdgeExplainers/blob/main/WebInstall/explainer.md), an API under development to allow web contents to install other web apps.
+
+➡️ **[Open the demo](https://microsoftedge.github.io/Demos/pwa-install-api/)** ⬅️
 
 ## Demos
 
-* [PWA Store](https://microsoftedge.github.io/Demos/pwa-pwastore)
+* [Microsoft Edge Demos](https://microsoftedge.github.io/Demos/pwa-install-api)
 
 ## About the deprecated `navigator.install(url)` method
 
