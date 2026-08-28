@@ -6,7 +6,7 @@ This page shows interactive demos of the [Reference Target](https://github.com/W
 
 ## Try the feature
 
-To try the feature, enable the **Experimental Web Platform features** flag at `about://flags` in Microsoft Edge or another Chromium-based browser.
+To try the feature, use Microsoft Edge version 152 or later, or a matching version of another Chromium-based browser.
 
 ## Learn more
 
